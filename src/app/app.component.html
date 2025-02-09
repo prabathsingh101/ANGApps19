@@ -1,14 +1,15 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" opened="true" class="sidenav">
     <mat-nav-list>
-      <mat-list-item>Dashboard</mat-list-item>
-      <mat-list-item>Dashboard</mat-list-item>
-      <mat-list-item>Dashboard</mat-list-item>
-      <mat-list-item>Dashboard</mat-list-item>
+      <mat-list-item routerLink="pages/dashboard">Dashboard</mat-list-item>
+      <mat-list-item routerLink="pages/authors">Authors</mat-list-item>
+      <mat-list-item routerLink="pages/publishers">Publishers</mat-list-item>
+      <mat-list-item routerLink="pages/books">Books</mat-list-item>
+      <mat-list-item routerLink="pages/members">Member</mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content class="main-content">
-    <mat-toolbar color="primary">
+    <mat-toolbar>
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="menu"></mat-icon>
       </button>

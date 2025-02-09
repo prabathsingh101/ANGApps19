@@ -81,6 +81,21 @@ html {
   );
 }
 
+.blue {
+  @include mat.theme(
+    (
+      color: mat.$blue-palette,
+    )
+  );
+}
+.magenta {
+  @include mat.theme(
+    (
+      color: mat.$magenta-palette,
+    )
+  );
+}
+
 html, body,.mat-sidenav-container { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
