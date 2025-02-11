@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="authorsForms" (ngSubmit)="onSubmit()">
   <mat-card appearance="outlined" style="margin-top: 20px;">
     <mat-card-header>
       <mat-card-title>Authors</mat-card-title>
@@ -7,19 +7,37 @@
       <div class="row">
         <div class="col-md-6">
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="First Name">
+            <input matInput placeholder="First Name" #firstname name="firstname" formControlName="firstname">
+            <mat-hint align="end">
+              {{firstname.value.length}} / 10
+            </mat-hint>
+            <mat-error *ngIf="getFirstname.errors?.required">
+              First name is required.
+            </mat-error>
+            <mat-error *ngIf="getFirstname.errors?.maxlength">
+              A maximum length of 10 characters is required.
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-md-6">
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="Last Name">
+            <input matInput placeholder="Last Name" #lastname name="lastname" formControlName="lastname">
+            <mat-hint align="end">
+              {{lastname.value.length}} / 10
+            </mat-hint>
+            <mat-error *ngIf="getLastname.errors?.required">
+              Last name is required.
+            </mat-error>
+            <mat-error *ngIf="getLastname.errors?.maxlength">
+              A maximum length of 10 characters is required.
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button>Cancel</button>&nbsp;
-      <button mat-flat-button class="btn">Save</button>
+      <button mat-flat-button class="spring-green">Save</button>
     </mat-card-actions>
   </mat-card>
 </form>
