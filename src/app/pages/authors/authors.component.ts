@@ -64,19 +64,53 @@ export class AuthorsComponent implements OnInit {
   get getLastname() {
     return this.authorsForms.controls['lastname'];
   }
+  // onSubmit() {
+  //   if (this.authorsForms.valid) {
+  //     this.authors = {
+  //       FirstName: this.authorsForms.value.firstname,
+  //       LastName: this.authorsForms.value.lastname,
+  //     };
+  //     //this.authorSubscription = this.authorService.addAuthors(this.authors);
+  //     this.authorService.addAuthors(this.authors).subscribe((res: any) => {
+  //       console.log(res);
+  //       if (res.statusCode == 200) {
+  //         this.toaster.success(res.message, res.messageType, { timeOut: 3000 });
+  //       }
+  //     });
+  //   }
+  // }
   onSubmit() {
     if (this.authorsForms.valid) {
       this.authors = {
         FirstName: this.authorsForms.value.firstname,
         LastName: this.authorsForms.value.lastname,
       };
-      //this.authorSubscription = this.authorService.addAuthors(this.authors);
-      this.authorService.addAuthors(this.authors).subscribe((res: any) => {
-        console.log(res);
-        if (res.statusCode == 200) {
-          this.toaster.success(res.message, res.messageType, { timeOut: 3000 });
-        }
-      });
+      this.authorSubscription = this.authorService
+        .addAuthors(this.authors)
+        .subscribe({
+          next: (res: any) => {
+            console.log(res);
+            if (res.statusCode == 200) {
+              this.toaster.success(res.message, res.messageType, {
+                timeOut: 3000,
+              });
+            }
+          },
+          error: (err: any) => {
+            console.error(err);
+            this.toaster.error(err.message, err.messageType, {
+              timeOut: 3000,
+            });
+          },
+          complete: () => {
+            console.log('Author addition completed.');
+          },
+        });
+    }
+  }
+  ngOnDestroy(): void {
+    if (this.authorSubscription) {
+      this.authorSubscription.unsubscribe();
     }
   }
 }
