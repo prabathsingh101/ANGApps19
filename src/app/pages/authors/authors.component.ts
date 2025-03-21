@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { AuthorsCrudService } from '../services/authors-crud.service';
-import { AuthorsService } from '../services/authors.service';
+
 @Component({
   selector: 'app-authors',
   imports: [
@@ -49,6 +49,7 @@ export class AuthorsComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+    this.getAuthors();
   }
 
   createForm() {
@@ -64,40 +65,26 @@ export class AuthorsComponent implements OnInit {
   get getLastname() {
     return this.authorsForms.controls['lastname'];
   }
-  // onSubmit() {
-  //   if (this.authorsForms.valid) {
-  //     this.authors = {
-  //       FirstName: this.authorsForms.value.firstname,
-  //       LastName: this.authorsForms.value.lastname,
-  //     };
-  //     //this.authorSubscription = this.authorService.addAuthors(this.authors);
-  //     this.authorService.addAuthors(this.authors).subscribe((res: any) => {
-  //       console.log(res);
-  //       if (res.statusCode == 200) {
-  //         this.toaster.success(res.message, res.messageType, { timeOut: 3000 });
-  //       }
-  //     });
-  //   }
-  // }
-  onSubmit() {
+
+  async onSubmit() {
     if (this.authorsForms.valid) {
       this.authors = {
         FirstName: this.authorsForms.value.firstname,
         LastName: this.authorsForms.value.lastname,
       };
-      this.authorSubscription = this.authorService
+      this.authorSubscription = await this.authorService
         .addAuthors(this.authors)
         .subscribe({
           next: (res: any) => {
-            console.log(res);
             if (res.statusCode == 200) {
               this.toaster.success(res.message, res.messageType, {
                 timeOut: 3000,
               });
+
+              this.getAuthors();
             }
           },
           error: (err: any) => {
-            console.error(err);
             this.toaster.error(err.message, err.messageType, {
               timeOut: 3000,
             });
@@ -108,6 +95,26 @@ export class AuthorsComponent implements OnInit {
         });
     }
   }
+
+  async getAuthors() {
+    await this.authorService.getAuthors().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.authors = res;
+          console.log(this.authors);
+        }
+      },
+      error: (err: any) => {
+        this.toaster.error(err.message, err.messageType, {
+          timeOut: 3000,
+        });
+      },
+      complete: () => {
+        console.log('Author addition completed.');
+      },
+    });
+  }
+
   ngOnDestroy(): void {
     if (this.authorSubscription) {
       this.authorSubscription.unsubscribe();
